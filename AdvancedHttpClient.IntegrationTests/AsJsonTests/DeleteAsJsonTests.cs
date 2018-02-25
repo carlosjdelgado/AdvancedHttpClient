@@ -1,0 +1,50 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using AdvancedHttpClient;
+using System;
+using System.Threading.Tasks;
+using AdvancedHttpClient.IntegrationTests.Models;
+using FluentAssertions;
+
+namespace AdvancedHttpClient.IntegrationTests.AsJsonTests
+{
+    [TestClass]
+    public class DeleteAsJsonTests
+    {
+        [TestMethod]
+        public async Task DeleteAsJson_WithRequestAndResponse()
+        {
+            var client = new HttpClientInstance
+            {
+                ResourceUri = new Uri("https://postman-echo.com/delete")
+            };
+
+            var request = BuildRequest();
+            var response = await client.DeleteAsync<SimpleRequest, Response>(request).ConfigureAwait(false);
+
+            response.Url.Should().Be("https://postman-echo.com/delete");
+        }
+
+        [TestMethod]
+        public async Task DeleteAsJson_WithResponse()
+        {
+            var client = new HttpClientInstance
+            {
+                ResourceUri = new Uri("https://postman-echo.com/delete")
+            };
+
+            var request = BuildRequest();
+            var response = await client.DeleteAsync<Response>().ConfigureAwait(false);
+
+            response.Url.Should().Be("https://postman-echo.com/delete");
+        }
+
+        private SimpleRequest BuildRequest()
+        {
+            return new SimpleRequest
+            {
+                Foo = "Foo",
+                Bar = "Bar"
+            };
+        }
+    }
+}
