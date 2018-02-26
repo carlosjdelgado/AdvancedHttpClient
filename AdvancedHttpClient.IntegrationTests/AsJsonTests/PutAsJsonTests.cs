@@ -32,6 +32,15 @@ namespace AdvancedHttpClient.IntegrationTests.AsJsonTests
             response.Url.Should().Be("https://postman-echo.com/put");
         }
 
+        [TestMethod]
+        public async Task PutAsJson_WithRequest()
+        {
+            var client = new HttpClientInstance("https://postman-echo.com/put");
+
+            var request = BuildRequest();
+            await client.PutAsync(request).ConfigureAwait(false);
+        }
+
         private SimpleRequest BuildRequest()
         {
             return new SimpleRequest

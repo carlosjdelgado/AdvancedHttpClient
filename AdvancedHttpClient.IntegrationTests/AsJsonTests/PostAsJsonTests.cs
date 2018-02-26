@@ -26,10 +26,18 @@ namespace AdvancedHttpClient.IntegrationTests.AsJsonTests
         {
             var client = new HttpClientInstance("https://postman-echo.com/post");
 
-            var request = BuildRequest();
             var response = await client.PostAsync<Response>().ConfigureAwait(false);
 
             response.Url.Should().Be("https://postman-echo.com/post");
+        }
+
+        [TestMethod]
+        public async Task PostAsJson_WithRequest()
+        {
+            var client = new HttpClientInstance("https://postman-echo.com/post");
+
+            var request = BuildRequest();
+            await client.PostAsync(request).ConfigureAwait(false);
         }
 
         private SimpleRequest BuildRequest()

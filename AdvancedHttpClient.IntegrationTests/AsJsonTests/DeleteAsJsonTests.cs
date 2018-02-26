@@ -32,6 +32,15 @@ namespace AdvancedHttpClient.IntegrationTests.AsJsonTests
             response.Url.Should().Be("https://postman-echo.com/delete");
         }
 
+        [TestMethod]
+        public async Task DeleteAsJson_WithRequest()
+        {
+            var client = new HttpClientInstance("https://postman-echo.com/delete");
+
+            var request = BuildRequest();
+            await client.DeleteAsync(request).ConfigureAwait(false);
+        }
+
         private SimpleRequest BuildRequest()
         {
             return new SimpleRequest
