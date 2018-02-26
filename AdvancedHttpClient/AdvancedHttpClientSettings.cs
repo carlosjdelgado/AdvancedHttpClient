@@ -1,4 +1,6 @@
 ﻿using AdvancedHttpClient.Formatters;
+using AdvancedHttpClient.HeadersHandlers;
+using AdvancedHttpClient.ResourceHandlers;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -11,7 +13,10 @@ namespace AdvancedHttpClient
     {
         public IFormatter RequestFormatter { get; set; }
         public IFormatter ResponseFormatter { get; set; }
+        public IHeadersHandler HeadersHandler { get; set; }
+        public IResourceHandler ResourceHandler { get; set; }
         public DecompressionMethods DecompressionMethods { get; set; }
+
         public AdvancedHttpClientSettings()
         {
             SetDefaultSettings();
@@ -21,6 +26,9 @@ namespace AdvancedHttpClient
         {
             RequestFormatter = new ModelAsJsonFormatter();
             ResponseFormatter = new ModelAsJsonFormatter();
+            HeadersHandler = new HeadersHandler();
+            ResourceHandler = new ResourceHandler();
+
             DecompressionMethods = DecompressionMethods.Deflate | DecompressionMethods.GZip;
         }
     }

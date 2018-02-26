@@ -13,10 +13,7 @@ namespace AdvancedHttpClient.IntegrationTests.AsJsonTests
         [TestMethod]
         public async Task PutAsJson_WithRequestAndResponse()
         {
-            var client = new HttpClientInstance
-            {
-                ResourceUri = new Uri("https://postman-echo.com/put")
-            };
+            var client = new HttpClientInstance("https://postman-echo.com/put");
 
             var request = BuildRequest();
             var response = await client.PutAsync<SimpleRequest, Response>(request).ConfigureAwait(false);
@@ -27,11 +24,8 @@ namespace AdvancedHttpClient.IntegrationTests.AsJsonTests
         [TestMethod]
         public async Task PutAsJson_WithResponse()
         {
-            var client = new HttpClientInstance
-            {
-                ResourceUri = new Uri("https://postman-echo.com/put")
-            };
-
+            var client = new HttpClientInstance("https://postman-echo.com/put");
+            
             var request = BuildRequest();
             var response = await client.PutAsync<Response>().ConfigureAwait(false);
 

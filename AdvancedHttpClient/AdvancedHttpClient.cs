@@ -14,27 +14,33 @@ namespace AdvancedHttpClient
         private AdvancedHttpClientSettings _settings;
         private HttpClient _client;
 
-        public RequestHeaders RequestHeaders { get; set; }
         public Uri ResourceUri { get; set; }
 
-        public HttpClientInstance(AdvancedHttpClientSettings settings = null)
+        public HttpClientInstance(string resourceUrl, AdvancedHttpClientSettings settings = null)
+            : this(new Uri(resourceUrl), settings)
         {
+        }
+
+        public HttpClientInstance(Uri resourceUri, AdvancedHttpClientSettings settings = null)
+        {
+            ResourceUri = resourceUri;
             _settings = settings ?? new AdvancedHttpClientSettings();
-            RequestHeaders = new RequestHeaders();
         }
 
         private async Task<TResponse> SendAsync<TRequest, TResponse>(TRequest request, HttpMethod httpMethod)
         {
             ResolveHttpClient();
-            var resourceUri = BuildResourceUri(request, httpMethod);
+            _settings.ResourceHandler.ResourceUri = ResourceUri;
+            var requestResourceUri = _settings.ResourceHandler.BuildRequestResourceUri(request, httpMethod);
 
             using (var requestStream = new MemoryStream())
             {
-                var httpRequest = new HttpRequestMessage(httpMethod, resourceUri)
+                var httpRequest = new HttpRequestMessage(httpMethod, requestResourceUri)
                 {
                     Content = await BuildStreamContent(request, httpMethod, requestStream).ConfigureAwait(false)
                 };
-                RequestHeaders.SetRequestHeaders(httpRequest);
+
+                _settings.HeadersHandler.SetRequestHeaders(httpRequest);
 
                 var httpResponse = await _client.SendAsync(httpRequest).ConfigureAwait(false);
                 var responseStream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
@@ -51,30 +57,6 @@ namespace AdvancedHttpClient
             }
             await _settings.RequestFormatter.Serialize(request, stream).ConfigureAwait(false);
             return new StreamContent(stream);
-        }
-
-        private Uri BuildResourceUri<TRequest>(TRequest request, HttpMethod httpMethod)
-        {
-            if (httpMethod == HttpMethod.Get)
-            {
-                return new Uri(ResourceUri, GetQueryString(request));
-            }
-
-            return ResourceUri;
-        }
-
-        private string GetQueryString<TRequest>(TRequest request)
-        {
-            var properties = from p in request.GetType().GetProperties()
-                             where p.GetValue(request) != null
-                             select $"{p.Name}={WebUtility.UrlEncode(p.GetValue(request).ToString())}";                        
-   
-            if(!properties.Any())
-            {
-                return string.Empty;
-            }
-
-            return  $"?{string.Join("&", properties)}";
         }
 
         private HttpClient ResolveHttpClient()

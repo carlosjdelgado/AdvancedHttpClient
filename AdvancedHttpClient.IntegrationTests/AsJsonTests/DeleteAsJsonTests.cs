@@ -13,10 +13,7 @@ namespace AdvancedHttpClient.IntegrationTests.AsJsonTests
         [TestMethod]
         public async Task DeleteAsJson_WithRequestAndResponse()
         {
-            var client = new HttpClientInstance
-            {
-                ResourceUri = new Uri("https://postman-echo.com/delete")
-            };
+            var client = new HttpClientInstance("https://postman-echo.com/delete");
 
             var request = BuildRequest();
             var response = await client.DeleteAsync<SimpleRequest, Response>(request).ConfigureAwait(false);
@@ -27,10 +24,7 @@ namespace AdvancedHttpClient.IntegrationTests.AsJsonTests
         [TestMethod]
         public async Task DeleteAsJson_WithResponse()
         {
-            var client = new HttpClientInstance
-            {
-                ResourceUri = new Uri("https://postman-echo.com/delete")
-            };
+            var client = new HttpClientInstance("https://postman-echo.com/delete");
 
             var request = BuildRequest();
             var response = await client.DeleteAsync<Response>().ConfigureAwait(false);
