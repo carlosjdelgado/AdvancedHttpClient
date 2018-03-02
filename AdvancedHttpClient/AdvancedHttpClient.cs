@@ -1,11 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace AdvancedHttpClient
 {
@@ -31,7 +27,7 @@ namespace AdvancedHttpClient
         {
             ResolveHttpClient();
             _settings.ResourceHandler.ResourceUri = ResourceUri;
-            var requestResourceUri = _settings.ResourceHandler.BuildRequestResourceUri(request, httpMethod);
+            var requestResourceUri = _settings.ResourceHandler.BuildResourceUri(request, httpMethod);
 
             using (var requestStream = new MemoryStream())
             {

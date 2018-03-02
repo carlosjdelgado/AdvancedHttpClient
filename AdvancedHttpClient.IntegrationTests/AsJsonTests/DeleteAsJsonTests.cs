@@ -1,6 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AdvancedHttpClient;
-using System;
 using System.Threading.Tasks;
 using AdvancedHttpClient.IntegrationTests.Models;
 using FluentAssertions;

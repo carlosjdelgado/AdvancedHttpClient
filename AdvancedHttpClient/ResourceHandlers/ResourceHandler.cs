@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdvancedHttpClient.ResourceHandlers
 {
-    public class ResourceHandler : IResourceHandler
+    public abstract class ResourceHandler
     {
-        public Uri ResourceUri { set; private get; }
+        internal Uri ResourceUri { set; private get; }
 
-        public Uri BuildRequestResourceUri<TRequest>(TRequest request, HttpMethod httpMethod)
+        public abstract Uri BuildResourceUri<TRequest>(TRequest request, HttpMethod httpMethod);
+
+        protected Uri GetStandardResourceUri<TRequest>(TRequest request, HttpMethod httpMethod)
         {
             if (httpMethod == HttpMethod.Get)
             {
@@ -22,7 +21,7 @@ namespace AdvancedHttpClient.ResourceHandlers
             return ResourceUri;
         }
 
-        private string GetQueryString<TRequest>(TRequest request)
+        protected string GetQueryString<TRequest>(TRequest request)
         {
             var properties = from p in request.GetType().GetProperties()
                              where p.GetValue(request) != null
