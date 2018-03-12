@@ -5,7 +5,7 @@ using System.Net;
 
 namespace AdvancedHttpClient
 {
-    public class AdvancedHttpClientSettings
+    public class Settings
     {
         public IFormatter RequestFormatter { get; set; }
         public IFormatter ResponseFormatter { get; set; }
@@ -13,7 +13,7 @@ namespace AdvancedHttpClient
         public ResourceHandler ResourceHandler { get; set; }
         public DecompressionMethods DecompressionMethods { get; set; }
 
-        public AdvancedHttpClientSettings()
+        public Settings()
         {
             SetDefaultSettings();
         }

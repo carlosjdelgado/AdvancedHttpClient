@@ -7,20 +7,20 @@ namespace AdvancedHttpClient
 {
     public partial class HttpClientInstance
     {
-        private AdvancedHttpClientSettings _settings;
+        private Settings _settings;
         private HttpClient _client;
 
         public Uri ResourceUri { get; set; }
 
-        public HttpClientInstance(string resourceUrl, AdvancedHttpClientSettings settings = null)
+        public HttpClientInstance(string resourceUrl, Settings settings = null)
             : this(new Uri(resourceUrl), settings)
         {
         }
 
-        public HttpClientInstance(Uri resourceUri, AdvancedHttpClientSettings settings = null)
+        public HttpClientInstance(Uri resourceUri, Settings settings = null)
         {
             ResourceUri = resourceUri;
-            _settings = settings ?? new AdvancedHttpClientSettings();
+            _settings = settings ?? new Settings();
         }
 
         private async Task<TResponse> SendAsync<TRequest, TResponse>(TRequest request, HttpMethod httpMethod)

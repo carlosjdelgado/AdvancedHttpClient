@@ -20,13 +20,10 @@ namespace AdvancedHttpClient.Formatters
 
         public async Task Serialize<T>(T input, Stream stream)
         {
-            await Task.Run(() =>
-            {
-                ValidateAllowedType(typeof(T));
-                var inputAsByteArray = (byte[])Convert.ChangeType(input, typeof(byte[]));
-                stream = new MemoryStream(inputAsByteArray);
-
-            }).ConfigureAwait(false);
+            ValidateAllowedType(typeof(T));
+            var inputAsByteArray = (byte[])Convert.ChangeType(input, typeof(byte[]));
+            await stream.WriteAsync(inputAsByteArray, 0, inputAsByteArray.Length).ConfigureAwait(false);
+            stream.Position = 0;
         }
 
         private void ValidateAllowedType(Type Type)
